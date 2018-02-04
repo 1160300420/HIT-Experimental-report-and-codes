@@ -1,0 +1,142 @@
+create table mall(
+mallid int primary key,
+mallname varchar(20),
+address varchar(50),
+malltel varchar(20)
+);
+
+create table cago(
+cagoid int primary key,
+mallid int,
+cagoname varchar(20),
+producedate varchar(30),
+price int,
+inventory int,
+foreign key(mallid) references mall(mallid)
+);
+
+create table customer(
+customerid int primary key,
+customername varchar(20),
+customergender varchar(20),
+customertel varchar(20)
+);
+
+create table saler(
+salerid int primary key,
+salername varchar(20),
+salergender varchar(20),
+salertel varchar(20)
+);
+
+create table director(
+directorid int primary key,
+directorname varchar(20),
+directorgender varchar(20),
+mallid int,
+foreign key(mallid) references mall(mallid)
+);
+
+create table cleaning(
+cleaningid int primary key,
+cleaningname varchar(20),
+cleaningtel varchar(20),
+cleaningsalary int
+);
+
+create table guard(
+guardid int primary key,
+guardname varchar(20),
+guardtel varchar(20),
+guardsalary int
+);
+
+create table manager(
+managerid int primary key,
+managername varchar(20),
+managertel varchar(20)
+);
+
+create table buy(
+buydate varchar(20),
+cost int,
+cagoid int,
+customerid int,
+primary key(cagoid,customerid) 
+);
+
+create table sale(
+saledate varchar(20),
+salevalue int,
+cagoid int,
+salerid int,
+primary key(cagoid,salerid)
+);
+
+create table profit(
+profitdate varchar(20),
+profitvalue int,
+cagoid int,
+mallid int,
+primary key(cagoid,mallid)
+);
+
+create table own(
+directorid int,
+mallid int,
+primary key(directorid,mallid)
+);
+
+create table manage(
+managerid int,
+mallid int,
+primary key(managerid,mallid)
+);
+
+create table work1(
+mallid int,
+cleaningid int,
+primary key(mallid,cleaningid)
+);
+
+create table work2(
+mallid int,
+guardid int,
+primary key(mallid,guardid)
+);
+
+create table work3(
+mallid int,
+salerid int,
+primary key(mallid,salerid)
+);
+
+set FOREIGN_KEY_CHECKS=0;  #在导入前设置为不检查外键约束  
+。。。。#导入数据  
+set FOREIGN_KEY_CHECKS=1;  #在导入后恢复检查外键约束  
+
+load data local infile "C:/Users/lovebear96/Desktop/buy.txt" into table buy;
+load data local infile "C:/Users/lovebear96/Desktop/cago.txt" into table cago;
+load data local infile "C:/Users/lovebear96/Desktop/cleaning.txt" into table cleaning;
+load data local infile "C:/Users/lovebear96/Desktop/customer.txt" into table customer;
+load data local infile "C:/Users/lovebear96/Desktop/director.txt" into table director;
+load data local infile "C:/Users/lovebear96/Desktop/guard.txt" into table guard;
+load data local infile "C:/Users/lovebear96/Desktop/mall.txt" into table mall;
+load data local infile "C:/Users/lovebear96/Desktop/manage.txt" into table manage;
+load data local infile "C:/Users/lovebear96/Desktop/manager.txt" into table manager;
+load data local infile "C:/Users/lovebear96/Desktop/own.txt" into table own;
+load data local infile "C:/Users/lovebear96/Desktop/profit.txt" into table profit;
+load data local infile "C:/Users/lovebear96/Desktop/sale.txt" into table sale;
+load data local infile "C:/Users/lovebear96/Desktop/saler.txt" into table saler;
+load data local infile "C:/Users/lovebear96/Desktop/work1.txt" into table work1;
+load data local infile "C:/Users/lovebear96/Desktop/work2.txt" into table work2;
+load data local infile "C:/Users/lovebear96/Desktop/work3.txt" into table work3;
+
+select managername,managertel from manager natural join manage group by manager.managerid having count(mallid)>=2;
+
+create view managemall as select t1.managername,t2.managerid,t2.mallid,t3
+.mallname from manager t1,manage t2,mall t3 where t1.managerid=t2.managerid and
+t2.mallid=t3.mallid;
+
+alter table cleaning add index ind(`cleaningsalary`);
+show index from cleaning;

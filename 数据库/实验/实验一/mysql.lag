@@ -1,0 +1,44 @@
+创建数据库：
+create database company;
+创建关系：
+（若忘记设置主键，用以下方法补充）
+ALTER TABLE test  ADD CONSTRAINT PK_test PRIMARY KEY (a)
+create table employee(
+   ename varchar(20),
+   essn varchar(18) primary key,
+   address varchar(50),
+   salary int,
+   superssn varchar(18),
+   dno int
+);
+
+create table department(
+   dname varchar(50),
+   dno int primary key,
+   mgrssn varchar(18),
+   mgrstartdate varchar(8)
+);
+
+create table project(
+   pname varchar(50),
+   pno int primary key,
+   plocation varchar(50),
+   dno int
+);
+
+create table works_on(
+   essn varchar(18),
+   pno int,
+   hours int,
+   primary key (essn,pno)
+);
+添加数据：
+load data local infile "C:/Users/lovebear96/Desktop/employee.txt" into table employee;
+
+load data local infile "C:/Users/lovebear96/Desktop/department.txt" into table department;
+
+load data local infile "C:/Users/lovebear96/Desktop/project.txt" into table project;
+
+load data local infile "C:/Users/lovebear96/Desktop/works_on.txt" into table works_on;
+更新数据：
+update project set pname="SQL Project" where pno=11;
